@@ -11,11 +11,16 @@ export function getMockStorage() {
       clear() {
         store = {};
       },
-      get(key) {
-        return store.hasOwnProperty(key) ? store[key] : null;
-      },
-      set(key, value) {
-        store[key] = value.toString();
+      removeItem(key) {
+        if (store.hasOwnProperty(key)) {
+          const updatedStore = {};
+          for (const k in store) {
+            if (k !== key) {
+              updatedStore[k] = store[k];
+            }
+          }
+          store = updatedStore;
+        }
       },
     };
   })();
