@@ -8,21 +8,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 
 import { GraphiQL } from '../GraphiQL';
-
-const mockStorage = (function() {
-  let store = {};
-  return {
-    getItem(key) {
-      return store.hasOwnProperty(key) ? store[key] : null;
-    },
-    setItem(key, value) {
-      store[key] = value.toString();
-    },
-    clear() {
-      store = {};
-    },
-  };
-})();
+import { mockStorage } from './helpers/storage';
 
 // The smallest possible introspection result that builds a schema.
 const simpleIntrospection = {
