@@ -1,0 +1,22 @@
+{
+  "extends": "../../resources/tsconfig.base.esm.json",
+  "compilerOptions": {
+    "jsx": "react",
+    "noImplicitAny": false, // TODO: remove this once all files have been converted to TypeScript
+    "rootDir": "./src",
+    "outDir": "./esm",
+    "allowJs": true,
+    "baseUrl": "."
+  },
+  "include": ["src/**/*"],
+  "exclude": [
+    "**/__tests__/**",
+    "**/dist/**.*",
+    "**/*.spec.ts",
+    "**/*.spec.js",
+    "**/*-test.ts",
+    "**/*-test.js",
+    "**/*.stories.js",
+    "**/*.stories.ts"
+  ]
+}
