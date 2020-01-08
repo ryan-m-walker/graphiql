@@ -56,9 +56,20 @@ const resultConfig = {
       // i think we need to add another rule for
       // codemirror-graphql esm.js files to load
       {
-        test: /\.(js|jsx)$/,
-        use: [{ loader: 'babel-loader' }],
-        exclude: /\.(ts|d\.ts|d\.ts\.map)$/,
+        test: /\.(js|jsx|ts|tsx)$/,
+        use: [
+          { loader: 'babel-loader' },
+          {
+            loader: 'ts-loader',
+            options: {
+              configFile: '../tsconfig.json',
+              onlyCompileBundledFiles: true,
+              projectReferences: true,
+            },
+          },
+        ],
+        // exclude: /\.(d\.ts|d\.ts\.map)$/,
+        exclude: /node_modules|\.(d\.ts|d\.ts\.map)$/,
       },
       {
         test: /\.css$/,
@@ -95,7 +106,7 @@ const resultConfig = {
     }),
   ],
   resolve: {
-    extensions: ['.mjs', '.js', '.json', '.jsx', '.css'],
+    extensions: ['.mjs', '.js', '.json', '.jsx', '.css', '.ts', '.tsx'],
     modules: [rootPath('node_modules'), rootPath('../', '../', 'node_modules')],
   },
 };

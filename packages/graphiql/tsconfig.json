@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    "removeComments": true,
+    "strict": true,
+    "noImplicitReturns": false,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["dom", "es2017", "esnext"],
+    "types": ["node", "jest"],
+    "jsx": "react",
+    "noImplicitAny": false,
+    "allowJs": true,
+    "baseUrl": "."
+  },
+  "exclude": [
+    "**/__tests__/**",
+    "**/dist/**.*",
+    "**/*.spec.ts",
+    "**/*.spec.js",
+    "**/*-test.ts",
+    "**/*-test.js",
+    "**/*.stories.js",
+    "**/*.stories.ts"
+  ]
+}
