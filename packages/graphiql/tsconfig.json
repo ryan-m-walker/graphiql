@@ -1,26 +1,14 @@
 {
+  "extends": "../../resources/tsconfig.base.cjs.json",
   "compilerOptions": {
-    "target": "esnext",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
-    "removeComments": true,
-    "strict": true,
-    "noImplicitReturns": false,
-    "noFallthroughCasesInSwitch": true,
-    "noUnusedParameters": true,
-    "noUnusedLocals": true,
-    "forceConsistentCasingInFileNames": true,
-    "lib": ["dom", "es2017", "esnext"],
-    "types": ["node", "jest"],
     "jsx": "react",
-    "noImplicitAny": false,
+    "noImplicitAny": false, // TODO: remove this once all files have been converted to TypeScript
+    "rootDir": "./src",
+    "outDir": "./dist",
     "allowJs": true,
     "baseUrl": "."
   },
+  "include": ["src/**/*"],
   "exclude": [
     "**/__tests__/**",
     "**/dist/**.*",
