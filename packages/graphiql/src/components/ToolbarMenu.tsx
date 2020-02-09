@@ -75,13 +75,13 @@ export class ToolbarMenu extends React.Component<
     }
   }
 
-  handleClick(e: MouseEvent<HTMLAnchorElement>) {
+  handleClick: EventListener = e => {
     if (this._node !== e.target) {
-      preventDefault(e);
+      e.preventDefault();
       this.setState({ visible: false });
       this._release();
     }
-  }
+  };
 
   handleOpen: MouseEventHandler<HTMLAnchorElement> = e => {
     preventDefault(e);
@@ -104,10 +104,10 @@ export const ToolbarMenuItem: FC<ToolbarMenuItemProps> = ({
   return (
     <li
       onMouseOver={e => {
-        e.target.className = 'hover';
+        e.currentTarget.className = 'hover';
       }}
       onMouseOut={e => {
-        e.target.className = null;
+        e.currentTarget.className = '';
       }}
       onMouseDown={preventDefault}
       onMouseUp={onSelect}
