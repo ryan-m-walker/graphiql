@@ -5,7 +5,7 @@
  *  LICENSE file in the root directory of this source tree.
  */
 
-import React, { FC, MouseEventHandler, MouseEvent } from 'react';
+import React, { FC, MouseEventHandler } from 'react';
 
 type ToolbarMenuProps = {
   title: string;
@@ -25,8 +25,8 @@ export class ToolbarMenu extends React.Component<
   ToolbarMenuProps,
   ToolbarMenuState
 > {
-  private _node: HTMLAnchorElement;
-  private _listener: this['handleClick'] | null;
+  private _node: HTMLAnchorElement | null = null;
+  private _listener: this['handleClick'] | null = null;
 
   constructor(props: ToolbarMenuProps) {
     super(props);
@@ -75,7 +75,7 @@ export class ToolbarMenu extends React.Component<
     }
   }
 
-  handleClick: EventListener = e => {
+  handleClick(e: MouseEvent | React.MouseEvent<HTMLAnchorElement>) {
     if (this._node !== e.target) {
       e.preventDefault();
       this.setState({ visible: false });
@@ -117,6 +117,6 @@ export const ToolbarMenuItem: FC<ToolbarMenuItemProps> = ({
   );
 };
 
-function preventDefault(e: MouseEvent) {
+function preventDefault(e: MouseEvent | React.MouseEvent) {
   e.preventDefault();
 }

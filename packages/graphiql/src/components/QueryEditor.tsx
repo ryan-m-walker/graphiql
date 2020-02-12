@@ -5,7 +5,7 @@
  *  LICENSE file in the root directory of this source tree.
  */
 
-import React, { FC } from 'react';
+import React from 'react';
 import * as CM from 'codemirror';
 import { GraphQLSchema, GraphQLType } from 'graphql';
 import MD from 'markdown-it';
@@ -47,8 +47,8 @@ type QueryEditorProps = {
 export class QueryEditor extends React.Component<QueryEditorProps, {}>
   implements SizerComponent {
   cachedValue: string | undefined;
-  editor: (CM.Editor & { options: any }) | null;
-  ignoreChangeEvent: boolean;
+  editor: (CM.Editor & { options: any }) | null = null;
+  ignoreChangeEvent: boolean = false;
 
   _node: HTMLElement | null = null;
 

@@ -9,7 +9,6 @@ import React, {
   ReactNode,
   ComponentType,
   PropsWithChildren,
-  MouseEvent,
   MouseEventHandler,
   Component,
   FunctionComponent,
@@ -124,7 +123,7 @@ type GraphiQLState = {
   historyPaneOpen: boolean;
   docExplorerWidth: number;
   isWaitingForResponse: boolean;
-  subscription: null; // TODO: find interface for this
+  subscription?: Unsubscribable | null;
   variableToType?: VariableToType;
   operations?: OperationDefinitionNode[];
 };
@@ -763,7 +762,12 @@ export class GraphiQL extends React.Component<GraphiQLProps, GraphiQLState> {
       });
   }
 
-  _fetchQuery(query: string, variables: string, operationName: string, cb) {
+  _fetchQuery(
+    query: string,
+    variables: string,
+    operationName: string,
+    cb: (value: FetcherResult) => any,
+  ) {
     const fetcher = this.props.fetcher;
     let jsonVariables = null;
 
@@ -862,7 +866,7 @@ export class GraphiQL extends React.Component<GraphiQLProps, GraphiQLState> {
         editedQuery,
         variables,
         operationName,
-        result => {
+        (result: FetcherResult) => {
           if (queryID === this._editorQueryID) {
             this.setState({
               isWaitingForResponse: false,
@@ -1042,7 +1046,7 @@ export class GraphiQL extends React.Component<GraphiQLProps, GraphiQLState> {
   handleHintInformationRender = (elem: HTMLDivElement) => {
     elem.addEventListener('click', this._onClickHintInformation);
 
-    let onRemoveFn;
+    let onRemoveFn: EventListener;
     elem.addEventListener(
       'DOMNodeRemoved',
       (onRemoveFn = () => {
@@ -1056,10 +1060,10 @@ export class GraphiQL extends React.Component<GraphiQLProps, GraphiQLState> {
     this._runQueryAtCursor();
   };
 
-  private _onClickHintInformation: MouseEventHandler<
-    HTMLDivElement
-  > = event => {
-    if (event.currentTarget.className === 'typeName') {
+  private _onClickHintInformation = (
+    event: MouseEvent | React.MouseEvent<HTMLDivElement>,
+  ) => {
+    if (event.currentTarget?.className === 'typeName') {
       const typeName = event.currentTarget.innerHTML;
       const schema = this.state.schema;
       if (schema) {
@@ -1113,7 +1117,7 @@ export class GraphiQL extends React.Component<GraphiQLProps, GraphiQLState> {
 
     const offset = downEvent.clientX - getLeft(downEvent.currentTarget);
 
-    let onMouseMove = (moveEvent: MouseEvent<Element, MouseEvent>) => {
+    let onMouseMove = (moveEvent: MouseEvent | React.MouseEvent<Element>) => {
       if (moveEvent.buttons === 0) {
         return onMouseUp();
       }
@@ -1139,7 +1143,7 @@ export class GraphiQL extends React.Component<GraphiQLProps, GraphiQLState> {
     this.setState({ editorFlex: 1 });
   };
 
-  _didClickDragBar(event: MouseEvent) {
+  _didClickDragBar(event: React.MouseEvent) {
     // Only for primary unmodified clicks
     if (event.button !== 0 || event.ctrlKey) {
       return false;
@@ -1168,7 +1172,9 @@ export class GraphiQL extends React.Component<GraphiQLProps, GraphiQLState> {
     const hadWidth = this.state.docExplorerWidth;
     const offset = downEvent.clientX - getLeft(downEvent.target);
 
-    let onMouseMove = (moveEvent: MouseEvent<Element, MouseEvent>) => {
+    let onMouseMove = (
+      moveEvent: React.MouseEvent<Element, React.MouseEvent>,
+    ) => {
       if (moveEvent.buttons === 0) {
         return onMouseUp();
       }
@@ -1218,7 +1224,9 @@ export class GraphiQL extends React.Component<GraphiQLProps, GraphiQLState> {
     const hadHeight = this.state.variableEditorHeight;
     const offset = downEvent.clientY - getTop(downEvent.target);
 
-    let onMouseMove = (moveEvent: MouseEvent<Element, MouseEvent>) => {
+    let onMouseMove = (
+      moveEvent: React.MouseEvent<Element, React.MouseEvent>,
+    ) => {
       if (moveEvent.buttons === 0) {
         return onMouseUp();
       }
@@ -1340,6 +1348,11 @@ type Unsubscribable = {
 };
 
 type Observable<T> = {
+  subscribe(opts: {
+    next: (value: T) => void;
+    error: (error: any) => void;
+    complete: () => void;
+  }): Unsubscribable;
   subscribe(
     next: (value: T) => void,
     error: null | undefined,

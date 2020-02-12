@@ -17,6 +17,18 @@ type ToolbarSelectProps = {
 type ToolbarSelectState = {
   visible: boolean;
 };
+
+type HasProps<T> = T extends { props: any } ? T : never;
+
+function hasProps<Child extends React.ReactNode>(
+  child: Child,
+): child is HasProps<Child> {
+  if (!child || typeof child !== 'object' || !('props' in child)) {
+    return false;
+  }
+  return true;
+}
+
 /**
  * ToolbarSelect
  *
@@ -28,8 +40,8 @@ export class ToolbarSelect extends React.Component<
   ToolbarSelectProps,
   ToolbarSelectState
 > {
-  private _node: HTMLAnchorElement | null;
-  private _listener: ((this: Document, ev: MouseEvent) => any) | null;
+  private _node: HTMLAnchorElement | null = null;
+  private _listener: ((this: Document, ev: MouseEvent) => any) | null = null;
   constructor(props: ToolbarSelectProps) {
     super(props);
     this.state = { visible: false };
@@ -40,12 +52,12 @@ export class ToolbarSelect extends React.Component<
   }
 
   render() {
-    let selectedChild: React.ReactNode;
+    let selectedChild: HasProps<React.ReactNode> | undefined;
     const visible = this.state.visible;
     const optionChildren = React.Children.map(
       this.props.children,
       (child, i) => {
-        if (!child || typeof child !== 'object' || !('props' in child)) {
+        if (!hasProps(child)) {
           return null;
         }
         if (!selectedChild || child.props.selected) {
@@ -95,7 +107,7 @@ export class ToolbarSelect extends React.Component<
     }
   }
 
-  handleClick(e) {
+  handleClick(e: MouseEvent) {
     if (this._node !== e.target) {
       preventDefault(e);
       this.setState({ visible: false });
@@ -103,7 +115,7 @@ export class ToolbarSelect extends React.Component<
     }
   }
 
-  handleOpen = e => {
+  handleOpen = (e: React.MouseEvent) => {
     preventDefault(e);
     this.setState({ visible: true });
     this._subscribe();
