@@ -62,7 +62,10 @@ export const SessionContext = React.createContext<
 
 export const useSessionContext = () => React.useContext(SessionContext);
 
-function reducer(state: SessionState, action: SessionAction): SessionState {
+function sessionReducer(
+  state: SessionState,
+  action: SessionAction,
+): SessionState {
   switch (action.type) {
     case SessionActionTypes.OperationRequested:
       return {
@@ -145,7 +148,7 @@ export function SessionProvider({
     SessionActionTypes,
     SessionAction
   >({
-    reducers: [reducer],
+    reducers: [sessionReducer],
     init: () => initialState,
   });
 
